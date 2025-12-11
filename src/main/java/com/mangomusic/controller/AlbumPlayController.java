@@ -40,7 +40,7 @@ public class AlbumPlayController {
     }
 
     @PostMapping
-    public ResponseEntity<AlbumPlay> createPlay(AlbumPlay play) {
+    public ResponseEntity<AlbumPlay> createPlay(@RequestBody AlbumPlay play) {
         try {
             AlbumPlay created = albumPlayService.createPlay(play);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
@@ -57,4 +57,6 @@ public class AlbumPlayController {
         }
         return ResponseEntity.noContent().build();
     }
+
+
 }

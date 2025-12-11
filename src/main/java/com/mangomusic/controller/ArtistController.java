@@ -1,5 +1,6 @@
 package com.mangomusic.controller;
 
+import com.mangomusic.model.Album;
 import com.mangomusic.model.Artist;
 import com.mangomusic.service.ArtistService;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class ArtistController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Artist> getArtistById(int id) {
+    public ResponseEntity<Artist> getArtistById(@PathVariable int id) {
         Artist artist = artistService.getArtistById(id);
         if (artist == null) {
             return ResponseEntity.notFound().build();
@@ -39,6 +40,17 @@ public class ArtistController {
     public ResponseEntity<List<String>> getAllGenres() {
         return ResponseEntity.ok(artistService.getAllGenres());
     }
+
+    @GetMapping("/{id}/top-album")
+    public ResponseEntity<Album> getTopAlbum(@PathVariable int artistId){
+        Artist artist = artistService.getArtistById(artistId);
+        Album artists = artistService.getTopAlbumForArtist(artistId);
+        if (artist == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(artists);
+    }
+
 
     @PostMapping
     public ResponseEntity<Artist> createArtist(@RequestBody Artist artist) {
@@ -71,4 +83,6 @@ public class ArtistController {
         }
         return ResponseEntity.noContent().build();
     }
+
+
 }

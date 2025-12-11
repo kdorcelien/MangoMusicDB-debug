@@ -3,6 +3,7 @@ package com.mangomusic.service;
 import com.mangomusic.dao.AlbumDao;
 import com.mangomusic.dao.ArtistDao;
 import com.mangomusic.model.Album;
+import com.mangomusic.model.AlbumPlay;
 import com.mangomusic.model.Artist;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,8 @@ public class AlbumService {
     public List<Album> getAlbumsByGenre(String genre) {
         return albumDao.getAlbumsByGenre(genre);
     }
+
+    public List<Album> getAlbumPlayCount(int albumId){return albumDao.getAlbumPlayCount(albumId);}
 
     public List<Album> searchAlbums(String searchTerm) {
         if (searchTerm == null || searchTerm.trim().isEmpty()) {

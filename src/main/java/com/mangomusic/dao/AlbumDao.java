@@ -1,6 +1,8 @@
 package com.mangomusic.dao;
 
 import com.mangomusic.model.Album;
+import com.mangomusic.model.AlbumPlay;
+import com.mangomusic.model.Artist;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -90,6 +92,57 @@ public class AlbumDao {
 
         return albums;
     }
+
+    public Album getTopAlbumForArtist(int artistId){
+        String query= "SELECT al.album_id, al.artist_id, al.title, al.release_year, ar.name as artist_name, " +
+                "        COUNT(ap.play_id) AS play_count " +
+                "        FROM albums al " +
+                "        JOIN artists ar ON al.artist_id = ar.artist_id " +
+                "        JOIN album_plays ap ON al.album_id = ap.album_id " +
+                "       WHERE al.artist_id = ? " +
+                "        GROUP BY al.album_id, al.artist_id, al.title, al.release_year, ar.name " +
+                "        ORDER BY play_count DESC, al.album_id ASC " +
+                "        LIMIT 1 ";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, artistId);
+
+            try (ResultSet results = statement.executeQuery()) {
+                if (results.next()) {
+                    return mapRowToAlbum(results);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting album by ID", e);
+        }
+        return null;
+    }
+
+    public List<Album> getAlbumPlayCount(int albumId){
+        List<Album> plays = new ArrayList<>();
+        String query = "SELECT COUNT(*) AS playCount FROM album_plays WHERE album_id = ? ";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, albumId);
+
+            try (ResultSet results = statement.executeQuery()) {
+                while (results.next()) {
+                    Album play = mapRowToAlbum(results);
+                    plays.add(play);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting album plays count", e);
+        }
+        return plays;
+    }
+
 
     public List<Album> getAlbumsByGenre(String genre) {
         List<Album> albums = new ArrayList<>();
