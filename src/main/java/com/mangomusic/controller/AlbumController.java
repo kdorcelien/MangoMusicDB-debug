@@ -1,6 +1,7 @@
 package com.mangomusic.controller;
 
 import com.mangomusic.model.Album;
+import com.mangomusic.model.Artist;
 import com.mangomusic.service.AlbumService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,8 +79,25 @@ public class AlbumController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{artistId}/play-count")
-    public ResponseEntity<List<Album>> getPlayCount(@PathVariable int albumId){
-        return ResponseEntity.ok(albumService.getAlbumPlayCount(albumId));
+    @GetMapping("/{albumId}/play-count")
+    public ResponseEntity<Album> getPlayCount(@PathVariable int albumId){
+        Album albums = albumService.getAlbumById(albumId);
+        Album album = albumService.getAlbumPlayCount(albumId);
+        if (albums == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(album);
     }
+
+
+
+    @GetMapping("/recent/{artist_id}")
+    public ResponseEntity<List<Album>> getRecentAlbums(@PathVariable int artist_id, @RequestParam(defaultValue = "5") int limit){
+        List<Album> album = albumService.getRecentAlbums(artist_id, limit);
+        if (album == null || album.isEmpty() ) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(album);
+    }
+
 }

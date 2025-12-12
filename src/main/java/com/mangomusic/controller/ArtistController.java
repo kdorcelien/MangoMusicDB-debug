@@ -41,7 +41,7 @@ public class ArtistController {
         return ResponseEntity.ok(artistService.getAllGenres());
     }
 
-    @GetMapping("/{id}/top-album")
+    @GetMapping("/{artistId}/top-album")
     public ResponseEntity<Album> getTopAlbum(@PathVariable int artistId){
         Artist artist = artistService.getArtistById(artistId);
         Album artists = artistService.getTopAlbumForArtist(artistId);

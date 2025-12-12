@@ -7,6 +7,8 @@ public class Album {
     private String title;
     private Integer releaseYear;  // Changed from int
     private String artistName;
+    private Integer playCount;
+
 
     public Album() {
     }
@@ -18,6 +20,20 @@ public class Album {
         this.releaseYear = releaseYear;
         this.artistName = artistName;
     }
+
+    public Album(Integer albumId, Integer artistId, String title, Integer releaseYear, String artistName, Integer playCount) {
+        this.albumId = albumId;
+        this.artistId = artistId;
+        this.title = title;
+        this.releaseYear = releaseYear;
+        this.artistName = artistName;
+        this.playCount = playCount;
+    }
+
+    public int getPlayCount() { return playCount;}
+
+    public void setPlayCount(int playCount) {
+        this.playCount = playCount;}
 
     public Integer getAlbumId() {
         return albumId;

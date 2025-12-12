@@ -36,7 +36,16 @@ public class AlbumService {
         return albumDao.getAlbumsByGenre(genre);
     }
 
-    public List<Album> getAlbumPlayCount(int albumId){return albumDao.getAlbumPlayCount(albumId);}
+    public Album getAlbumPlayCount(int albumId){return albumDao.getAlbumPlayCount(albumId);}
+
+    public List<Album> getRecentAlbums(int artist_id, int limit){
+        if (limit < 1) {
+            limit = 5;
+        }
+        if (limit > 100) {
+            limit = 100;
+        }
+        return albumDao.getRecentAlbums(artist_id,limit);}
 
     public List<Album> searchAlbums(String searchTerm) {
         if (searchTerm == null || searchTerm.trim().isEmpty()) {
